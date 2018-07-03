@@ -1,25 +1,93 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+Course Project Activity Monitoring Data Analysis
+==========================================================
+
+Load data to R.
+
+```{r}
+setwd("C:/Users/mariat/Downloads/repdata%2Fdata%2Factivity")
+activity<-read.csv('activity.csv')
+```
+Transform date column to Date format in R.
+```{r}
+activity$date<-as.Date(as.character(activity$date))
+```
+
+Calculate the total number of steps taken per day ignorring NA values.
+
+```{r}
+totalDay<-aggregate(steps~date,activity,sum)
+```
+
+Histogram of the total number of steps taken each day.
+
+```{r}
+library(ggplot2)
+qplot(totalDay$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA')
+```
+
+Calculate and report the mean and median of the total number of steps taken per day.
+
+```{r}
+mean(totalDay$steps)
+median(totalDay$steps)
+```
+
+Make a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
+
+```{r}
+#Calculate average number of steps per interval for all days
+aver<-aggregate(steps~interval,activity,mean)
+#Create a plot
+qplot(aver$interval,aver$steps,geom='line', col='red',xlab='Interval',ylab='Steps (mean)',main='Average Steps per Interval')
+#Find interval with maximum steps during the day
+dd<-which.max(aver$steps)
+aver[dd,]
+```
+
+Impute missing values by finding the average value per interval and substituting NA with it. 
+
+```{r}
+library(reshape2)
+#Perform data transformation to calculate mean steps per interval.
+noNA<-activity[!is.na(activity$steps),c(1,3)]
+noNAmelt<-melt(noNA,id.vars='interval')
+noNAdcast<-dcast(noNAmelt,interval~variable,mean)
+#create a new dataset that is equal to the existing one
+activity1<-activity
+#Assign mean steps values to the interval column.
+activity1$noNA<-activity1$interval
+#Create a new column in dataframe to for the mean values input.   
+activity1$noNA<-noNAdcast$steps
+#Create index to know which rows to replace.
+indexNA<-which(is.na(activity1$steps))
+#Perform replacement.
+activity1$steps<-replace(activity1$steps,indexNA,activity1$noNA)
+#Delete as the column is no longer needed
+activity1$noNA<-NULL
+```
+
+Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
 
-## Loading and preprocessing the data
+```{r}
+totalDay1<-aggregate(steps~date,activity1,sum)
+qplot(totalDay1$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA removed')
+mean(totalDay1$steps)
+median(totalDay1$steps)
+```
 
+Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
+```{r}
+#calculate average number of steps taken per day
+averPerIntervalDate<-aggregate(steps~interval+date,activity1,mean)
+#create a column with weekdays
+averPerIntervalDate$wDays<-weekdays(averPerIntervalDate$date)
+#create a column with date types
+averPerIntervalDate$dType=ifelse(averPerIntervalDate$wDays=='Saturday'|averPerIntervalDate$wDays=='Sunday', 'Weekend','Weekday')
+#make a plot
+par(mar=c(4,4,2,4))
+qplot(interval,steps,data=averPerIntervalDate,facets=dType~.,geom='line',col=steps,xlab='Interval',ylab='Average Steps',main='Steps on Weekdays vs Weekend')
 
-## What is mean total number of steps taken per day?
+```
 
-
-
-## What is the average daily activity pattern?
-
-
-
-## Imputing missing values
-
-
-
-## Are there differences in activity patterns between weekdays and weekends?
