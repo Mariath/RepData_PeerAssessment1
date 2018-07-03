@@ -1,7 +1,7 @@
 Course Project Activity Monitoring Data Analysis.
 ==========================================================
 
-Load data to R and format it for better abalysis.
+Load data to R and format it for better analysis.
 
 
 ```r
@@ -148,3 +148,4 @@ qplot(interval,steps,data=averPerIntervalDate,facets=dType~.,geom='line',col=ste
 
 ![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
 
+From the plots above we can see that total number of steps on weekends is slightly smaller than on weekdays. Also on the weekdays, the most active 5 min intervals are in the morning and first part of the day, decreasing after 1500. Whereas on weekend, the most active is second part of the day till late night.
