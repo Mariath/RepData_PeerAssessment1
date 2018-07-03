@@ -1,7 +1,7 @@
 Course Project Activity Monitoring Data Analysis.
 ==========================================================
 
-Load data to R and format it for better analysis.
+Load data to R. 
 
 ```{r, echo=TRUE}
 setwd("C:/Users/mariat/Downloads/repdata%2Fdata%2Factivity")
