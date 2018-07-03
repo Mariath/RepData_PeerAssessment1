@@ -3,40 +3,40 @@ Course Project Activity Monitoring Data Analysis.
 
 Load data to R. 
 
-```{r, echo=TRUE}
+```{r}
 setwd("C:/Users/mariat/Downloads/repdata%2Fdata%2Factivity")
 activity<-read.csv('activity.csv')
 ```
 
 Transform date column to Date format in R.
 
-```{r,echo=TRUE}
+```{r}
 activity$date<-as.Date(as.character(activity$date))
 ```
 
 Calculate the total number of steps taken per day ignorring NA values.
 
-```{r,echo=TRUE}
+```{r}
 totalDay<-aggregate(steps~date,activity,sum)
 ```
 
 Histogram of the total number of steps taken each day.
 
-```{r plot with NA,echo=TRUE,fig.height=4}
+```{r plotwithNA,fig.height=4}
 library(ggplot2)
 qplot(totalDay$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA')
 ```
 
 Calculate and report the mean and median of the total number of steps taken per day.
 
-```{r mean,echo=TRUE}
+```{r mean}
 mean(totalDay$steps)
 median(totalDay$steps)
 ```
 
 Make a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis).
 
-```{r plotmeansteps,echo=TRUE,fig.height=4}
+```{r plotmeansteps,fig.height=4}
 #Calculate average number of steps per interval for all days
 aver<-aggregate(steps~interval,activity,mean)
 #Create a plot
@@ -49,7 +49,7 @@ aver[dd,]
 
 Impute missing values by finding the average value per interval and substituting NA with it. 
 
-```{r ,echo=TRUE}
+```{r}
 library(reshape2)
 #Perform data transformation to calculate mean steps per interval.
 noNA<-activity[!is.na(activity$steps),c(1,3)]
@@ -82,7 +82,7 @@ median(totalDay1$steps)
 
 Create a new factor variable in the dataset with two levels - "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 
-```{r plotwdayswend, echo=TRUE, fig.height=4}
+```{r plotwdayswend, fig.height=4}
 #calculate average number of steps taken per day
 averPerIntervalDate<-aggregate(steps~interval+date,activity1,mean)
 #create a column with weekdays

@@ -1,7 +1,7 @@
 Course Project Activity Monitoring Data Analysis.
 ==========================================================
 
-Load data to R and format it for better analysis.
+Load data to R. 
 
 
 ```r
@@ -31,7 +31,7 @@ library(ggplot2)
 qplot(totalDay$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA')
 ```
 
-![plot of chunk plot with NA](figure/plot with NA-1.png)
+![plot of chunk plotwithNA](figure/plotwithNA-1.png)
 
 Calculate and report the mean and median of the total number of steps taken per day.
 
