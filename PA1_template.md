@@ -8,7 +8,9 @@ Load data to R and format it for better analysis.
 setwd("C:/Users/mariat/Downloads/repdata%2Fdata%2Factivity")
 activity<-read.csv('activity.csv')
 ```
+
 Transform date column to Date format in R.
+
 
 ```r
 activity$date<-as.Date(as.character(activity$date))
@@ -29,7 +31,7 @@ library(ggplot2)
 qplot(totalDay$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA')
 ```
 
-![plot of chunk unnamed-chunk-4](figure/unnamed-chunk-4-1.png)
+![plot of chunk plot with NA](figure/plot with NA-1.png)
 
 Calculate and report the mean and median of the total number of steps taken per day.
 
@@ -60,7 +62,7 @@ aver<-aggregate(steps~interval,activity,mean)
 qplot(aver$interval,aver$steps,geom='line', col='red',xlab='Interval',ylab='Steps (mean)',main='Average Steps per Interval')
 ```
 
-![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
+![plot of chunk plotmeansteps](figure/plotmeansteps-1.png)
 
 ```r
 #Find interval with maximum steps during the day
@@ -110,10 +112,11 @@ Make a histogram of the total number of steps taken each day and Calculate and r
 
 ```r
 totalDay1<-aggregate(steps~date,activity1,sum)
+
 qplot(totalDay1$steps,binwidth=1000,xlab='Steps',main='Total Number of Steps per Day with NA removed')
 ```
 
-![plot of chunk unnamed-chunk-8](figure/unnamed-chunk-8-1.png)
+![plot of chunk plotnaremoved](figure/plotnaremoved-1.png)
 
 ```r
 mean(totalDay1$steps)
@@ -146,6 +149,6 @@ par(mar=c(4,4,2,4))
 qplot(interval,steps,data=averPerIntervalDate,facets=dType~.,geom='line',col=steps,xlab='Interval',ylab='Average Steps',main='Steps on Weekdays vs Weekend')
 ```
 
-![plot of chunk unnamed-chunk-9](figure/unnamed-chunk-9-1.png)
+![plot of chunk plotwdayswend](figure/plotwdayswend-1.png)
 
 From the plots above we can see that total number of steps on weekends is slightly smaller than on weekdays. Also on the weekdays, the most active 5 min intervals are in the morning and first part of the day, decreasing after 1500. Whereas on weekend, the most active is second part of the day till late night.
